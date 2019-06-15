@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TitleScene : MonoBehaviour
 {
@@ -40,5 +41,9 @@ public class TitleScene : MonoBehaviour
         titleScene.enabled = true;
         titleScene.Play("InputStart");
         inputField.SetActive(true);
+    }
+
+    public void EnterGame() {
+        SceneManager.LoadScene("MainScene");
     }
 }
