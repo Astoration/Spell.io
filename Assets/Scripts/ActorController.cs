@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActorController : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class ActorController : MonoBehaviour
     public CharacterController characterController;
     [HideInInspector]
     public Animator animator;
+    public Text nickname;
 
     public float speed = 5;
     #endregion
@@ -33,6 +35,10 @@ public class ActorController : MonoBehaviour
         if (!hasController)
         {
             Destroy(playerCamera.gameObject);
+        }
+        if (hasController)
+        {
+            nickname.text = PlayerStatusManager.Instance.nickname ?? "Unknown Player";
         }
     }
     #endregion

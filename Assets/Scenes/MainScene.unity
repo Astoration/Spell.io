@@ -12176,6 +12176,7 @@ MonoBehaviour:
   chracterRoot: {fileID: 198461931}
   characterController: {fileID: 0}
   animator: {fileID: 0}
+  nickname: {fileID: 1859285640}
   speed: 5
 --- !u!4 &680219366
 Transform:
@@ -33801,7 +33802,7 @@ GameObject:
   - component: {fileID: 1859285641}
   - component: {fileID: 1859285640}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Nickname
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

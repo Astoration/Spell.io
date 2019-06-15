@@ -4783,6 +4783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleScene: {fileID: 298662772}
   inputField: {fileID: 594656343}
+  nicknameField: {fileID: 594656345}
   isStarted: 0
 --- !u!4 &299052098 stripped
 Transform:
