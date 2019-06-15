@@ -18,8 +18,12 @@ public class ActorController : MonoBehaviour
     [HideInInspector]
     public Animator animator;
     public Text nickname;
+    public GameObject magicPrefab;
 
     public float speed = 5;
+    [HideInInspector]
+    public float currentCoolTime = 0f;
+    public float coolTime = 0.3f;
     #endregion
 
     // Start is called before the first frame update
@@ -46,14 +50,26 @@ public class ActorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        StatusUpdate();
         MoveControl();
+        ActionControl();
         UpdateAnimation();
     }
 
     #region CHARACTOR_UPDATE
-    private void MoveControl() {
-        Debug.Log("Move:");
-        Debug.Log(MoveInput.Direction);
+    private void StatusUpdate() 
+    {
+        if (0 < currentCoolTime)
+        {
+            currentCoolTime -= Time.deltaTime;
+        } else
+        {
+            currentCoolTime = 0;
+        }
+    }
+
+    private void MoveControl()
+    {
         Vector3 input = Vector3.zero;
         input += transform.forward * MoveInput.Vertical;
         input += transform.right * MoveInput.Horizontal;
@@ -63,7 +79,19 @@ public class ActorController : MonoBehaviour
         chracterRoot.rotation = Quaternion.Euler(new Vector3(0,characterDegree,0));
     }
 
-    private Vector3 ApplyGravity(Vector3 input) {
+    public void ActionControl()
+    {
+        if (0 < currentCoolTime) return;
+        var actDirection = ActionInput.Direction;
+        if (actDirection.magnitude < 1) return;
+        currentCoolTime = coolTime;
+        var degree = Mathf.Atan2(ActionInput.Horizontal, ActionInput.Vertical) * Mathf.Rad2Deg;
+        var direction = Quaternion.Euler(new Vector3(0, degree, 0));
+        Instantiate(magicPrefab, transform.position + Vector3.up * 0.5f,direction);
+    }
+
+    private Vector3 ApplyGravity(Vector3 input)
+    {
         var source = input;
         if (!characterController.isGrounded)
         {
