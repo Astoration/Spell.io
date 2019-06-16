@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class ActorController : MonoBehaviour
 {
     #region PROPERTIES
     private readonly float gravity = -9.8f;
-    public bool hasController = true;
+    public bool hasController = false;
     public Camera playerCamera;
     public VariableJoystick MoveInput;
     public VariableJoystick ActionInput;
@@ -34,6 +35,7 @@ public class ActorController : MonoBehaviour
 
     #region INITAL
     private void InitalComponent() {
+        hasController =  this.gameObject.GetPhotonView().IsMine;
         characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
         if (!hasController)
@@ -50,10 +52,13 @@ public class ActorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StatusUpdate();
-        MoveControl();
-        ActionControl();
-        UpdateAnimation();
+        if (hasController)
+        {
+            StatusUpdate();
+            MoveControl();
+            ActionControl();
+            UpdateAnimation();
+        }
     }
 
     #region CHARACTOR_UPDATE
