@@ -44,6 +44,8 @@ public class ActorController : MonoBehaviour
         }
         if (hasController)
         {
+            MoveInput = InputController.Instance.moveInput;
+            ActionInput = InputController.Instance.actionInput;
             nickname.text = PlayerStatusManager.Instance.nickname ?? "Unknown Player";
         }
     }

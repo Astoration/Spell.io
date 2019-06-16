@@ -7,6 +7,7 @@ using Photon.Pun;
 public class MainSceneController : MonoBehaviourPunCallbacks {
     public Transform[] spawnSpot;
     public static GameObject player;
+    public GameObject loadingPanel;
     public readonly string version = "1.0.0";
 
     #region MonoBehavior LifeCycle
@@ -48,6 +49,7 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
         if (player == null)
         {
             SpawnPlayer();
+            loadingPanel.SetActive(false);
         }
     }
     #endregion
