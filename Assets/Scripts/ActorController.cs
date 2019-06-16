@@ -46,8 +46,8 @@ public class ActorController : MonoBehaviour
         {
             MoveInput = InputController.Instance.moveInput;
             ActionInput = InputController.Instance.actionInput;
-            nickname.text = PlayerStatusManager.Instance.nickname ?? "Unknown Player";
         }
+        nickname.text = gameObject.GetPhotonView().Owner.NickName ?? "Unknown Player";
     }
     #endregion
 
@@ -104,7 +104,12 @@ public class ActorController : MonoBehaviour
         var direction = Quaternion.Euler(new Vector3(0, degree, 0));
         animator.SetTrigger("Action");
         chracterRoot.rotation = direction;
-        Instantiate(magicPrefab, transform.position + Vector3.up * 0.5f,direction);
+        gameObject.GetPhotonView().RPC("MakeProjectile", RpcTarget.All, magicPrefab.name, transform.position + Vector3.up * 0.5f, direction);
+    }
+
+    [PunRPC]
+    public void MakeProjectile(string projectile, Vector3 position, Quaternion direction) {
+        PhotonNetwork.Instantiate(projectile, transform.position + Vector3.up * 0.5f, direction);
     }
 
     private Vector3 ApplyGravity(Vector3 input)

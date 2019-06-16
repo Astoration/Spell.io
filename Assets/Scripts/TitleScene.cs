@@ -28,7 +28,7 @@ public class TitleScene : MonoBehaviour
     private void UpdateStart() 
     {
         bool isTouched = false;
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE
         isTouched = Input.GetMouseButton(0);
 #else
         isTouched = Input.touchCount != 0;

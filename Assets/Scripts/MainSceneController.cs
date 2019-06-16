@@ -34,6 +34,7 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
     private void PhotonConnect() {
         PhotonNetwork.GameVersion = version;
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.NickName = PlayerStatusManager.Instance.nickname;
     }
 
     public override void OnConnectedToMaster() {
