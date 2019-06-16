@@ -41,6 +41,11 @@ public class ActorController : MonoBehaviour
             {
                 health = maxHealth;
             }
+            if (health < 0)
+            {
+                health = 0;
+                OnPlayerDead();
+            }
             healthManager.SetHealth(health);
         }
     }
@@ -151,6 +156,19 @@ public class ActorController : MonoBehaviour
 #endif
         animator.SetFloat("Horizontal", Math.Abs(moveInput.x));
         animator.SetFloat("Vertical", Math.Abs(moveInput.y));
+    }
+    #endregion
+
+    #region CHARACTER_UTIL
+    public void ApplyDamage(float damage) {
+        Health -= damage;
+        animator.SetTrigger("Damage");
+    }
+    #endregion
+
+    #region CHARACTER_EVENT
+    void OnPlayerDead() {
+
     }
     #endregion
 }
