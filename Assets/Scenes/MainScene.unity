@@ -38093,6 +38093,11 @@ PrefabInstance:
       propertyPath: ActionInput
       value: 
       objectReference: {fileID: 1810506870}
+    - target: {fileID: 2915538099643355287, guid: e61df47a3e23f644bba75551f9756d86,
+        type: 3}
+      propertyPath: isEditor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2915538098747460924, guid: e61df47a3e23f644bba75551f9756d86,
         type: 3}
       propertyPath: m_SizeDelta.y

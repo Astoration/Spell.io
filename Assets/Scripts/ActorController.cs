@@ -20,7 +20,7 @@ public class ActorController : MonoBehaviour
     public Animator animator;
     public Text nickname;
     public GameObject magicPrefab;
-
+    public bool isEditor = false;
     public float speed = 5;
     [HideInInspector]
     public float currentCoolTime = 0f;
@@ -75,13 +75,20 @@ public class ActorController : MonoBehaviour
 
     private void MoveControl()
     {
-        if (MoveInput.Direction.magnitude == 0) return;
+        var moveInput = MoveInput.Direction;
+#if UNITY_EDITOR
+        if(isEditor)
+            moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+#endif
+        if (moveInput.magnitude == 0) return;
         Vector3 input = Vector3.zero;
-        input += transform.forward * MoveInput.Vertical;
-        input += transform.right * MoveInput.Horizontal;
+        var vertical = moveInput.y;
+        var horizontal = moveInput.x;
+        input += transform.forward * vertical;
+        input += transform.right * horizontal;
         input = ApplyGravity(input);
         characterController.Move(input * speed * Time.deltaTime);
-        var characterDegree = Mathf.Atan2(MoveInput.Horizontal,MoveInput.Vertical) * Mathf.Rad2Deg;
+        var characterDegree = Mathf.Atan2(moveInput.x,moveInput.y) * Mathf.Rad2Deg;
         chracterRoot.rotation = Quaternion.Euler(new Vector3(0,characterDegree,0));
     }
 
@@ -110,8 +117,13 @@ public class ActorController : MonoBehaviour
 
     private void UpdateAnimation() 
     {
-        animator.SetFloat("Horizontal", Math.Abs(MoveInput.Horizontal));
-        animator.SetFloat("Vertical", Math.Abs(MoveInput.Vertical));
+        var moveInput = MoveInput.Direction;
+#if UNITY_EDITOR
+        if (isEditor)
+            moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+#endif
+        animator.SetFloat("Horizontal", Math.Abs(moveInput.x));
+        animator.SetFloat("Vertical", Math.Abs(moveInput.y));
     }
     #endregion
 }
