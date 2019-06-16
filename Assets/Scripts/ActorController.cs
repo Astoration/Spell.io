@@ -70,6 +70,7 @@ public class ActorController : MonoBehaviour
 
     private void MoveControl()
     {
+        if (MoveInput.Direction.magnitude == 0) return;
         Vector3 input = Vector3.zero;
         input += transform.forward * MoveInput.Vertical;
         input += transform.right * MoveInput.Horizontal;
