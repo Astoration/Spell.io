@@ -14,17 +14,36 @@ public class ActorController : MonoBehaviour
     public VariableJoystick MoveInput;
     public VariableJoystick ActionInput;
     public Transform chracterRoot;
+    public Transform shotPoint;
     [HideInInspector]
     public CharacterController characterController;
     [HideInInspector]
     public Animator animator;
     public Text nickname;
     public GameObject magicPrefab;
+    public HealthContainer healthManager;
     public bool isEditor = false;
     public float speed = 5;
+    public float maxHealth = 5f;
+    private float health = 5f;
     [HideInInspector]
     public float currentCoolTime = 0f;
     public float coolTime = 0.3f;
+
+    public float Health {
+        get {
+            return health;
+        }
+
+        set {
+            health = value;
+            if (maxHealth < value)
+            {
+                health = maxHealth;
+            }
+            healthManager.SetHealth(health);
+        }
+    }
     #endregion
 
     // Start is called before the first frame update
@@ -101,15 +120,16 @@ public class ActorController : MonoBehaviour
         if (actDirection.magnitude < 1) return;
         currentCoolTime = coolTime;
         var degree = Mathf.Atan2(ActionInput.Horizontal, ActionInput.Vertical) * Mathf.Rad2Deg;
-        var direction = Quaternion.Euler(new Vector3(0, degree, 0));
         animator.SetTrigger("Action");
+        var direction = Quaternion.Euler(new Vector3(0, degree, 0));
         chracterRoot.rotation = direction;
-        gameObject.GetPhotonView().RPC("MakeProjectile", RpcTarget.All, magicPrefab.name, transform.position + Vector3.up * 0.5f, direction);
+        gameObject.GetPhotonView().RPC("MakeProjectile", RpcTarget.All, magicPrefab.name, shotPoint.position, degree);
     }
 
     [PunRPC]
-    public void MakeProjectile(string projectile, Vector3 position, Quaternion direction) {
-        PhotonNetwork.Instantiate(projectile, transform.position + Vector3.up * 0.5f, direction);
+    public void MakeProjectile(string projectile, Vector3 position, float degree) {
+        var direction = Quaternion.Euler(new Vector3(0, degree, 0));
+        PhotonNetwork.Instantiate(projectile, position, direction);
     }
 
     private Vector3 ApplyGravity(Vector3 input)
