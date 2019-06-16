@@ -41,7 +41,7 @@ public class ActorController : MonoBehaviour
             {
                 health = maxHealth;
             }
-            if (health < 0)
+            if (health <= 0)
             {
                 health = 0;
                 OnPlayerDead();
@@ -78,7 +78,7 @@ public class ActorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hasController)
+        if (hasController && 0 < Health)
         {
             StatusUpdate();
             MoveControl();
@@ -168,7 +168,7 @@ public class ActorController : MonoBehaviour
 
     #region CHARACTER_EVENT
     void OnPlayerDead() {
-
+        animator.SetBool("Dead",true);
     }
     #endregion
 }
