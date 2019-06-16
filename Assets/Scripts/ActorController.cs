@@ -87,6 +87,8 @@ public class ActorController : MonoBehaviour
         currentCoolTime = coolTime;
         var degree = Mathf.Atan2(ActionInput.Horizontal, ActionInput.Vertical) * Mathf.Rad2Deg;
         var direction = Quaternion.Euler(new Vector3(0, degree, 0));
+        animator.SetTrigger("Action");
+        chracterRoot.rotation = direction;
         Instantiate(magicPrefab, transform.position + Vector3.up * 0.5f,direction);
     }
 
