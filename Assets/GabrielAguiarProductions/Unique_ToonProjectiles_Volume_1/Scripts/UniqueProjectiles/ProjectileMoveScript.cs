@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class ProjectileMoveScript : MonoBehaviour {
 
@@ -116,7 +117,11 @@ public class ProjectileMoveScript : MonoBehaviour {
                 if (hitPrefab != null)
                 {
                     var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
-
+                    var damage = hitVFX.GetComponent<ApplyExplosionDamage>();
+                    if(damage != null)
+                    {
+                        damage.owner = PhotonNetwork.NickName;
+                    }
                     var ps = hitVFX.GetComponent<ParticleSystem>();
                     if (ps == null)
                     {

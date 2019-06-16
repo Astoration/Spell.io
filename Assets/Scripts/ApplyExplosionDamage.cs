@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ApplyExplosionDamage : MonoBehaviour
 {
+    public string owner = "";
     private void OnCollisionEnter(Collision collision) {
         ApplyDamage(collision.gameObject);
     }
@@ -16,7 +18,11 @@ public class ApplyExplosionDamage : MonoBehaviour
         var hasActor = target.GetComponent<ActorController>();
         if(hasActor != null)
         {
-            hasActor.ApplyDamage(0.5f);
+            bool kill = hasActor.ApplyDamage(0.5f);
+            if (kill && PhotonNetwork.NickName == owner)
+            {
+                RankingManager.Instance.gameObject.GetPhotonView().RPC("IncrementKill", RpcTarget.All ,owner);
+            }
         }
     }
 }

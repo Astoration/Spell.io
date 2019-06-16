@@ -50,6 +50,9 @@ public class RankingManager : MonoBehaviour,IPunObservable {
         if (killRank.ContainsKey(nickname))
         {
             killRank[nickname] += 1;
+        } else
+        {
+            killRank.Add(nickname, 1);
         }
         UpdateRankingPanel();
     }

@@ -160,9 +160,11 @@ public class ActorController : MonoBehaviour
     #endregion
 
     #region CHARACTER_UTIL
-    public void ApplyDamage(float damage) {
+    public bool ApplyDamage(float damage) {
+        if (Health <= 0) return false;
         Health -= damage;
         animator.SetTrigger("Damage");
+        return Health <= 0;
     }
     #endregion
 
