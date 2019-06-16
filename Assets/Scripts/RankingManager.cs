@@ -13,11 +13,16 @@ public class RankingManager : Singleton<RankingManager>,IPunObservable {
             stream.SendNext(killRank);
         }else if (stream.IsReading)
         {
-            var killRank = stream.ReceiveNext();
+            var prevCount = killRank.Count;
+            killRank = (Dictionary<string,int>)stream.ReceiveNext();
+            if(prevCount != killRank.Count)
+            {
+                UpdateRankingPanel();
+            }
         }
     }
 
-    void UpdateRankingPnael() {
+    void UpdateRankingPanel() {
         rankingText.text = "";
         var ranking = killRank.GetEnumerator();
         var i = 1;
@@ -34,7 +39,7 @@ public class RankingManager : Singleton<RankingManager>,IPunObservable {
         {
             killRank[nickname] += 1;
         }
-        UpdateRankingPnael();
+        UpdateRankingPanel();
     }
 
     [PunRPC]
@@ -43,7 +48,7 @@ public class RankingManager : Singleton<RankingManager>,IPunObservable {
         {
             killRank.Add(nickname, 0);
         }
-        UpdateRankingPnael();
+        UpdateRankingPanel();
     }
 
     [PunRPC]
@@ -52,7 +57,7 @@ public class RankingManager : Singleton<RankingManager>,IPunObservable {
         {
             killRank.Remove(nickname);
         }
-        UpdateRankingPnael();
+        UpdateRankingPanel();
     }
 
     // Start is called before the first frame update
