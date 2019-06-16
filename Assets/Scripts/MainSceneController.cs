@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class MainSceneController : MonoBehaviourPunCallbacks {
+    public static MainSceneController instance;
     public Transform[] spawnSpot;
     public static GameObject player;
     public GameObject loadingPanel;
@@ -14,10 +16,17 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
     public void Awake() {
         PhotonNetwork.AddCallbackTarget(this);
         PhotonNetwork.AutomaticallySyncScene = true;
+        instance = this;
     }
 
     public void Start() {
-        PhotonConnect();
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.JoinRandomRoom();
+        } else
+        {
+            PhotonConnect();
+        }
     }
 
     private void OnDestroy() {
@@ -25,9 +34,13 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
     }
     #endregion
 
-    private void SpawnPlayer() {
+    public void SpawnPlayer() {
         var spawnIndex = UnityEngine.Random.Range(0, spawnSpot.Length);
         player = PhotonNetwork.Instantiate("Player", spawnSpot[spawnIndex].position, Quaternion.identity);
+    }
+
+    public void LeftGame() {
+        PhotonNetwork.LeaveRoom();
     }
 
     #region Photon LifeCycle
@@ -58,6 +71,7 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
     public override void OnLeftRoom() {
         RankingManager.Instance.gameObject.GetPhotonView().RPC("RemoveUser", RpcTarget.All, PhotonNetwork.NickName ?? "Unknown Player");
         base.OnLeftRoom();
+        SceneManager.LoadScene("TitleScene");
     }
     #endregion
 }

@@ -7357,8 +7357,8 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 495c9e2a934bcc640a8d7427b13cb680, type: 3}
-    m_FontSize: 26
+    m_Font: {fileID: 12800000, guid: 0bb9b2478cae8094c8d1eeafd0dfd3e3, type: 3}
+    m_FontSize: 29
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -7630,7 +7630,7 @@ MonoBehaviour:
   characterController: {fileID: 0}
   animator: {fileID: 0}
   nickname: {fileID: 1218}
-  magicPrefab: {fileID: 461, guid: bf47747033cc923438e2bbcd2a09a383, type: 3}
+  magicPrefab: {fileID: 463, guid: bf47747033cc923438e2bbcd2a09a383, type: 3}
   healthManager: {fileID: 1276}
   isEditor: 1
   speed: 5

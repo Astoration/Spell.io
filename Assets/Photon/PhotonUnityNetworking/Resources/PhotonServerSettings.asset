@@ -36,5 +36,6 @@ MonoBehaviour:
   - AddUser
   - IncrementKill
   - RemoveUser
+  - RespawnUser
   DisableAutoOpenWizard: 1
   ShowSettings: 1

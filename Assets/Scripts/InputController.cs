@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InputController : Singleton<InputController>
+public class InputController : MonoBehaviour
 {
-    public VariableJoystick moveInput;
-    public VariableJoystick actionInput;
-
-    void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode) {
-        if (scene.name != "MainScene")
-        {
-            Destroy(gameObject);
+    public static InputController Instance {
+        get {
+            return instance;
         }
     }
-
-    private void OnEnable() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+    private static InputController instance;
+    public void Awake() {
+        if (instance == null)
+            instance = this;
     }
+    public VariableJoystick moveInput;
+    public VariableJoystick actionInput;
 }

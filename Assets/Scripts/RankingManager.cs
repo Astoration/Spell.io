@@ -4,9 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RankingManager : Singleton<RankingManager>,IPunObservable {
+public class RankingManager : MonoBehaviour,IPunObservable {
+    public static RankingManager Instance {
+        get {
+            return instance;
+        }
+    }
+    public static RankingManager instance;
     public Dictionary<string, int> killRank = new Dictionary<string, int>();
     public Text rankingText;
+
+    private void Awake() {
+        if (instance == null)
+            instance = this;
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting)
         {
