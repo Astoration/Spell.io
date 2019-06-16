@@ -51,7 +51,13 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
         {
             SpawnPlayer();
             loadingPanel.SetActive(false);
+            RankingManager.Instance.gameObject.GetPhotonView().RPC("AddUser", RpcTarget.All, PhotonNetwork.NickName ?? "Unknown Player");
         }
+    }
+
+    public override void OnLeftRoom() {
+        RankingManager.Instance.gameObject.GetPhotonView().RPC("RemoveUser", RpcTarget.All, PhotonNetwork.NickName ?? "Unknown Player");
+        base.OnLeftRoom();
     }
     #endregion
 }
