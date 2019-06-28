@@ -171,7 +171,10 @@ public class ActorController : MonoBehaviour
     #region CHARACTER_EVENT
     void OnPlayerDead() {
         animator.SetBool("Dead",true);
-        RespawnManager.Instance.Dead();
+        if (hasController)
+        {
+            RespawnManager.Instance.Dead();
+        }
     }
 
     [PunRPC]
