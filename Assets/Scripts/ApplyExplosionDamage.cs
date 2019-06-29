@@ -16,10 +16,13 @@ public class ApplyExplosionDamage : MonoBehaviour
 
     private void ApplyDamage(GameObject target) {
         var hasActor = target.GetComponent<ActorController>();
-        if(hasActor != null)
+        if(hasActor != null && hasActor.hasController && !hasActor.IsDead)
         {
             bool kill = hasActor.ApplyDamage(0.5f);
-            if (kill && PhotonNetwork.NickName == owner)
+            var targetView = target.GetPhotonView();
+            Debug.Log(targetView.Owner.NickName + " : " + owner);
+
+            if (kill && targetView.Owner.NickName != owner)
             {
                 RankingManager.Instance.gameObject.GetPhotonView().RPC("IncrementKill", RpcTarget.All ,owner);
             }

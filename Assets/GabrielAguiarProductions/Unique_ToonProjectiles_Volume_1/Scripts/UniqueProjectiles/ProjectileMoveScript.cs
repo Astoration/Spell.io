@@ -118,9 +118,10 @@ public class ProjectileMoveScript : MonoBehaviour {
                 {
                     var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
                     var damage = hitVFX.GetComponent<ApplyExplosionDamage>();
-                    if(damage != null)
+                    var view = gameObject.GetPhotonView();
+                    if(damage != null && view != null)
                     {
-                        damage.owner = PhotonNetwork.NickName;
+                        damage.owner = view.Owner.NickName;
                     }
                     var ps = hitVFX.GetComponent<ParticleSystem>();
                     if (ps == null)

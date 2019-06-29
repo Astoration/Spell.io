@@ -22,6 +22,7 @@ public class ActorController : MonoBehaviour
     public Text nickname;
     public GameObject magicPrefab;
     public HealthContainer healthManager;
+    PhotonView view;
     public bool isEditor = false;
     public float speed = 5;
     public float maxHealth = 5f;
@@ -29,7 +30,9 @@ public class ActorController : MonoBehaviour
     [HideInInspector]
     public float currentCoolTime = 0f;
     public float coolTime = 0.3f;
-
+    public bool IsDead {
+        get { return health <= 0; }
+    }
     public float Health {
         get {
             return health;
@@ -62,6 +65,7 @@ public class ActorController : MonoBehaviour
         hasController =  this.gameObject.GetPhotonView().IsMine;
         characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
+        view = gameObject.GetPhotonView();
         if (!hasController)
         {
             Destroy(playerCamera.gameObject);
@@ -161,6 +165,14 @@ public class ActorController : MonoBehaviour
 
     #region CHARACTER_UTIL
     public bool ApplyDamage(float damage) {
+        if (hasController)
+        {
+            view.RPC("RpcApplyDamage", RpcTarget.All, damage);
+        }
+        return Health - damage <= 0;
+    }
+    [PunRPC]
+    public bool RpcApplyDamage(float damage) {
         if (Health <= 0) return false;
         Health -= damage;
         animator.SetTrigger("Damage");

@@ -69,6 +69,7 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
     }
 
     public override void OnLeftRoom() {
+        player.GetPhotonView().RPC("RespawnUser", RpcTarget.All);
         RankingManager.Instance.gameObject.GetPhotonView().RPC("RemoveUser", RpcTarget.All, PhotonNetwork.NickName ?? "Unknown Player");
         base.OnLeftRoom();
         SceneManager.LoadScene("TitleScene");
