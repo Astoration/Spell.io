@@ -104,10 +104,20 @@ public class ActorController : MonoBehaviour {
             MoveControl();
             ActionControl();
             UpdateAnimation();
+#if UNITY_EDITOR
+            DebugKey();
+#endif
         }
     }
 
+
     #region CHARACTOR_UPDATE
+    private void DebugKey() {
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            view.RPC("LevelUp", RpcTarget.All);
+        }
+    }
     private void StatusUpdate() {
         if (0 < currentCoolTime)
         {
@@ -164,8 +174,28 @@ public class ActorController : MonoBehaviour {
 
     [PunRPC]
     public void MakeProjectile(string projectile, Vector3 position, float degree) {
-        Quaternion direction = Quaternion.Euler(new Vector3(0, degree, 0));
-        PhotonNetwork.Instantiate(projectile, position, direction);
+        var count = 1 + Mathf.FloorToInt(Level / 3);
+        var unit = 6f;
+        var offset = 0f;
+        var start = degree;
+        bool isOdd = count % 2 == 0;
+        if (1 < count)
+        {
+            if (isOdd)
+            {
+                start -= (count / 2) * unit;
+                offset = unit * 2;
+            } else
+            {
+                start -= ((count - 1) / 2) * unit;
+                offset = unit;
+            }
+        }
+        for (int i = 0 ; i < count ; i++)
+        {
+            Quaternion direction = Quaternion.Euler(new Vector3(0, start + offset * i, 0));
+            PhotonNetwork.Instantiate(projectile, position, direction);
+        }
     }
 
     private Vector3 ApplyGravity(Vector3 input) {
