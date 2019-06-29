@@ -107,7 +107,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -4827,7 +4827,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -9547,7 +9547,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -14267,7 +14267,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -18893,8 +18893,10 @@ GameObject:
   - component: {fileID: 54394676346946918}
   - component: {fileID: 135790818958241890}
   - component: {fileID: 114757712934105204}
+  - component: {fileID: 7632922448739362812}
+  - component: {fileID: 2086645073018593275}
   m_Layer: 12
-  m_Name: vfx_ToonProjectile_TriangleBlue
+  m_Name: iceBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18909,7 +18911,7 @@ Transform:
   m_GameObject: {fileID: 1962646870923850}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.65, y: 2, z: -0.05}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.41887, y: 0.41887, z: 0.41887}
   m_Children:
   - {fileID: 4466894535852488}
   - {fileID: 4911438588995052}
@@ -18937,7 +18939,7 @@ MonoBehaviour:
   fireRate: 4
   muzzlePrefab: {fileID: 1779451694322954, guid: 773a246c7cccdf74a923b1b08e411977,
     type: 3}
-  hitPrefab: {fileID: 1423167456353516, guid: 5c9f2e637478e2b4d94b0245306b5e84, type: 3}
+  hitPrefab: {fileID: 1423167456353516, guid: fa60c2b6915ef44739e7bb103dd033dd, type: 3}
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   trails:
@@ -19002,3 +19004,39 @@ MonoBehaviour:
   - {fileID: 1948296609094292}
   - {fileID: 1225959865209112}
   ActiveParticleSystems: 01010101
+--- !u!114 &7632922448739362812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1962646870923850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &2086645073018593275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1962646870923850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d1a70247dc0294b9c48baea2be9b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSfx: {fileID: 1151389840381191022, guid: 5b2d446181e5f6c438e49a23b8c346ec,
+    type: 3}
