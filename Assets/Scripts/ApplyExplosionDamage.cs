@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ApplyExplosionDamage : MonoBehaviour
 {
@@ -24,7 +25,12 @@ public class ApplyExplosionDamage : MonoBehaviour
 
             if (kill && targetView.Owner.NickName != owner)
             {
-                RankingManager.Instance.gameObject.GetPhotonView().RPC("IncrementKill", RpcTarget.All ,owner);
+                RankingManager.Instance.gameObject.GetPhotonView().RPC("IncrementKill", RpcTarget.All, owner);
+                var kiler = FindObjectsOfType<ActorController>().First(user => user.playerNickname == owner);
+                if (kiler != null)
+                {
+                    kiler.view.RPC("LevelUp",RpcTarget.All);
+                }
             }
         }
     }

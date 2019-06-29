@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Photon.Pun;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
 
-public class ActorController : MonoBehaviour
-{
+public class ActorController : MonoBehaviour {
     #region PROPERTIES
     private readonly float gravity = -9.8f;
     public bool hasController = false;
@@ -22,7 +19,7 @@ public class ActorController : MonoBehaviour
     public Text nickname;
     public GameObject magicPrefab;
     public HealthContainer healthManager;
-    PhotonView view;
+    public PhotonView view;
     public bool isEditor = false;
     public float speed = 5;
     public float maxHealth = 5f;
@@ -30,6 +27,9 @@ public class ActorController : MonoBehaviour
     [HideInInspector]
     public float currentCoolTime = 0f;
     public float coolTime = 0.3f;
+    private int killCount = 0;
+    private int level = 1;
+    public string playerNickname;
     public bool IsDead {
         get { return health <= 0; }
     }
@@ -52,17 +52,27 @@ public class ActorController : MonoBehaviour
             healthManager.SetHealth(health);
         }
     }
+
+    public int Level {
+        get {
+            return level;
+        }
+
+        set {
+            level = value;
+            UpdatePlayerUI();
+        }
+    }
     #endregion
 
     // Start is called before the first frame update
-    void Start()
-    {
+    private void Start() {
         InitalComponent();
     }
 
     #region INITAL
     private void InitalComponent() {
-        hasController =  this.gameObject.GetPhotonView().IsMine;
+        hasController = this.gameObject.GetPhotonView().IsMine;
         characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
         view = gameObject.GetPhotonView();
@@ -75,13 +85,18 @@ public class ActorController : MonoBehaviour
             MoveInput = InputController.Instance.moveInput;
             ActionInput = InputController.Instance.actionInput;
         }
-        nickname.text = gameObject.GetPhotonView().Owner.NickName ?? "Unknown Player";
+        playerNickname = gameObject.GetPhotonView().Owner.NickName ?? "Unknown Player";
+        gameObject.name = playerNickname;
+        UpdatePlayerUI();
+    }
+
+    private void UpdatePlayerUI() {
+        nickname.text = "LV" + Level + "." + playerNickname;
     }
     #endregion
 
     // Update is called once per frame
-    void Update()
-    {
+    private void Update() {
         if (hasController && 0 < Health)
         {
             StatusUpdate();
@@ -92,8 +107,7 @@ public class ActorController : MonoBehaviour
     }
 
     #region CHARACTOR_UPDATE
-    private void StatusUpdate() 
-    {
+    private void StatusUpdate() {
         if (0 < currentCoolTime)
         {
             currentCoolTime -= Time.deltaTime;
@@ -103,47 +117,58 @@ public class ActorController : MonoBehaviour
         }
     }
 
-    private void MoveControl()
-    {
-        var moveInput = MoveInput.Direction;
+    private void MoveControl() {
+        Vector2 moveInput = MoveInput.Direction;
 #if UNITY_EDITOR
-        if(isEditor)
+        if (isEditor)
+        {
             moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
 #endif
-        if (moveInput.magnitude == 0) return;
+        if (moveInput.magnitude == 0)
+        {
+            return;
+        }
+
         Vector3 input = Vector3.zero;
-        var vertical = moveInput.y;
-        var horizontal = moveInput.x;
+        float vertical = moveInput.y;
+        float horizontal = moveInput.x;
         input += transform.forward * vertical;
         input += transform.right * horizontal;
         input = ApplyGravity(input);
         characterController.Move(input * speed * Time.deltaTime);
-        var characterDegree = Mathf.Atan2(moveInput.x,moveInput.y) * Mathf.Rad2Deg;
-        chracterRoot.rotation = Quaternion.Euler(new Vector3(0,characterDegree,0));
+        float characterDegree = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg;
+        chracterRoot.rotation = Quaternion.Euler(new Vector3(0, characterDegree, 0));
     }
 
-    public void ActionControl()
-    {
-        if (0 < currentCoolTime) return;
-        var actDirection = ActionInput.Direction;
-        if (actDirection.magnitude < 1) return;
+    public void ActionControl() {
+        if (0 < currentCoolTime)
+        {
+            return;
+        }
+
+        Vector2 actDirection = ActionInput.Direction;
+        if (actDirection.magnitude < 1)
+        {
+            return;
+        }
+
         currentCoolTime = coolTime;
-        var degree = Mathf.Atan2(ActionInput.Horizontal, ActionInput.Vertical) * Mathf.Rad2Deg;
+        float degree = Mathf.Atan2(ActionInput.Horizontal, ActionInput.Vertical) * Mathf.Rad2Deg;
         animator.SetTrigger("Action");
-        var direction = Quaternion.Euler(new Vector3(0, degree, 0));
+        Quaternion direction = Quaternion.Euler(new Vector3(0, degree, 0));
         chracterRoot.rotation = direction;
         gameObject.GetPhotonView().RPC("MakeProjectile", RpcTarget.All, magicPrefab.name, shotPoint.position, degree);
     }
 
     [PunRPC]
     public void MakeProjectile(string projectile, Vector3 position, float degree) {
-        var direction = Quaternion.Euler(new Vector3(0, degree, 0));
+        Quaternion direction = Quaternion.Euler(new Vector3(0, degree, 0));
         PhotonNetwork.Instantiate(projectile, position, direction);
     }
 
-    private Vector3 ApplyGravity(Vector3 input)
-    {
-        var source = input;
+    private Vector3 ApplyGravity(Vector3 input) {
+        Vector3 source = input;
         if (!characterController.isGrounded)
         {
             source += new Vector3(0, gravity, 0);
@@ -151,12 +176,13 @@ public class ActorController : MonoBehaviour
         return source;
     }
 
-    private void UpdateAnimation() 
-    {
-        var moveInput = MoveInput.Direction;
+    private void UpdateAnimation() {
+        Vector2 moveInput = MoveInput.Direction;
 #if UNITY_EDITOR
         if (isEditor)
+        {
             moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
 #endif
         animator.SetFloat("Horizontal", Math.Abs(moveInput.x));
         animator.SetFloat("Vertical", Math.Abs(moveInput.y));
@@ -173,7 +199,11 @@ public class ActorController : MonoBehaviour
     }
     [PunRPC]
     public bool RpcApplyDamage(float damage) {
-        if (Health <= 0) return false;
+        if (Health <= 0)
+        {
+            return false;
+        }
+
         Health -= damage;
         animator.SetTrigger("Damage");
         return Health <= 0;
@@ -181,12 +211,17 @@ public class ActorController : MonoBehaviour
     #endregion
 
     #region CHARACTER_EVENT
-    void OnPlayerDead() {
-        animator.SetBool("Dead",true);
+    private void OnPlayerDead() {
+        animator.SetBool("Dead", true);
         if (hasController)
         {
             RespawnManager.Instance.Dead();
         }
+    }
+
+    [PunRPC]
+    public void LevelUp() {
+        Level += 1;
     }
 
     [PunRPC]

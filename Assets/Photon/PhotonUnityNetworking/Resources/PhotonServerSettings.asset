@@ -38,5 +38,6 @@ MonoBehaviour:
   - RemoveUser
   - RespawnUser
   - RpcApplyDamage
+  - LevelUp
   DisableAutoOpenWizard: 1
   ShowSettings: 1
