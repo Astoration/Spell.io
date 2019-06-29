@@ -18,6 +18,7 @@ public class ActorController : MonoBehaviour {
     public Animator animator;
     public Text nickname;
     public GameObject magicPrefab;
+    public GameObject levelUpEffecPrefab;
     public HealthContainer healthManager;
     public PhotonView view;
     public bool isEditor = false;
@@ -222,6 +223,7 @@ public class ActorController : MonoBehaviour {
     [PunRPC]
     public void LevelUp() {
         Level += 1;
+        Instantiate(levelUpEffecPrefab, transform);
     }
 
     [PunRPC]

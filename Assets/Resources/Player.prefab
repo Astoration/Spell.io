@@ -7632,6 +7632,8 @@ MonoBehaviour:
   animator: {fileID: 0}
   nickname: {fileID: 1218}
   magicPrefab: {fileID: 463, guid: bf47747033cc923438e2bbcd2a09a383, type: 3}
+  levelUpEffecPrefab: {fileID: 1936482672348932, guid: a44dbb85d16ceb04db128cc9f610036f,
+    type: 3}
   healthManager: {fileID: 1276}
   view: {fileID: 0}
   isEditor: 1
