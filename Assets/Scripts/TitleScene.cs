@@ -9,7 +9,9 @@ public class TitleScene : MonoBehaviour
     public Animator titleScene;
     public GameObject inputField;
     public InputField nicknameField;
+    public GameObject characterSelector;
     public bool isStarted = false;
+    public string selectedCharacter = "1";
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +47,19 @@ public class TitleScene : MonoBehaviour
         inputField.SetActive(true);
     }
 
+    public void OnSelectCharacter(GameObject item)
+    {
+        if (item == null) return;
+        selectedCharacter = item.name;
+    }
+
+
+    public void EnableSelector() {
+        characterSelector.SetActive(true);
+    }
+
     public void EnterGame() {
+        PlayerStatusManager.Instance.selectedCharacter = selectedCharacter;
         PlayerStatusManager.Instance.nickname = nicknameField.text;
         SceneManager.LoadScene("MainScene");
     }

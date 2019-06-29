@@ -5,5 +5,5 @@ using UnityEngine;
 public class PlayerStatusManager : Singleton<PlayerStatusManager>
 {
     public string nickname;
-
+    public string selectedCharacter;
 }

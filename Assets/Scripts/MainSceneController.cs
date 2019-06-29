@@ -36,7 +36,7 @@ public class MainSceneController : MonoBehaviourPunCallbacks {
 
     public void SpawnPlayer() {
         var spawnIndex = UnityEngine.Random.Range(0, spawnSpot.Length);
-        player = PhotonNetwork.Instantiate("Player", spawnSpot[spawnIndex].position, Quaternion.identity);
+        player = PhotonNetwork.Instantiate("Player"+PlayerStatusManager.Instance.selectedCharacter, spawnSpot[spawnIndex].position, Quaternion.identity);
     }
 
     public void LeftGame() {
